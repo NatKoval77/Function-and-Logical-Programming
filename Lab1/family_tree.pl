@@ -60,6 +60,17 @@ brothers(Ch_name):- brother(Bt_name,Ch_name), print(Bt_name), nl, fail.
 
 % br_sis(+Ch_name1, +Ch_name2)
 br_sis(Ch_name1,Ch_name2):- parent(P_name,Ch_name1), parent(P_name,Ch_name2), Ch_name1 \= Ch_name2.
-% b_s(+Ch_name1, +Ch_name2)
+% b_s(+Ch_name1)
 b_s(Ch_name1):- br_sis(Ch_name1, Ch_name2), print(Ch_name2), nl, fail.
 
+% Second task
+% daughter(+Dt_name, +Mt_name)
+daughter(Dt_name, Mt_name):- woman(Mt_name), parent(Mt_name, Dt_name), woman(Dt_name).
+% daughter(+Mt_name)
+daughter(Mt_name):- daughter(Dt_name, Mt_name), print(Dt_name), nl, fail.
+
+% husband(+Ft_name, +Mt_name)
+husband(Ft_name, Mt_name):- man(Ft_name), parent(Ft_name, Ch_name), woman(Mt_name), parent(Mt_name, Ch_name).
+% husband(+Mt_name)
+husband(Mt_name):- husband(Ft_name, Mt_name), print(Ft_name), nl, !.
+% Для вывода мужа только один раз использую "!." - отсечение, так как при условии,  что детей несколько - выводилось имя мужа несколько раз
