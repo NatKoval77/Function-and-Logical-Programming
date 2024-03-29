@@ -82,7 +82,7 @@ grand_ma(Gm_name, Ch_name):- woman(Gm_name), parent(Gm_name, P_name), parent(P_n
 grand_mas(Ch_name):- grand_ma(Gm_name, Ch_name), print(Gm_name), nl, fail.
 
 % grand_ma_dt(+Gm_name, +Ch_name)
-grand_ma_dt(Gm_name, Ch_name):- woman(Ch_name), grand_ma(Gm_name, Ch_name).
+grand_ma_dt(Gm_name, Ch_name):- (woman(Ch_name), grand_ma(Gm_name, Ch_name)); (woman(Gm_name), grand_ma(Ch_name, Gm_name)).
 
 % aunt(+Au_name, +Ch_name)
 aunt(Au_name, Ch_name):- woman(Au_name), br_sis(Au_name, P_name), parent(P_name, Ch_name).
