@@ -37,7 +37,7 @@ sport(snowcross):-
 sport(bandy):-
     kind(winter_sport),
     kind(team_sport),
-    kind(ball).
+    (enough_no(2) -> !, true).
 
 sport(acrobatics_on_skis):-
     kind(winter_sport),
@@ -77,12 +77,12 @@ sport(badminton):-
 
 sport(baseball):-
     kind(team_sport),
-    kind(ball).
+    (enough_no(2) -> !, true).
 
 sport(sailing):-
     kind(olympic_sport),
     kind(extreme),
-    kind(water_sport).
+    (enough_yes(2) -> !, true).
 
 sport(diving):-
     kind(olympic_sport),
@@ -107,6 +107,16 @@ sport(hydro_speed):-
 
 sport(mini_golf):-
     kind(ball).
+
+enough_no(Enough):-
+    bagof(Prompt, asked(Prompt, n), List),
+    length(List,Count),
+    Count = Enough, !.
+
+enough_yes(Enough):-
+    bagof(Prompt, asked(Prompt, y), List),
+    length(List,Count),
+    Count = Enough, !.
 
 query(Prompt) :-
     (
