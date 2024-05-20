@@ -24,6 +24,12 @@ kind(water_sport) :-
 kind(ball) :-
     query('Is there a ball in this sport?').
 
+kind(hands):-
+    query('Is this sport played with hands?').
+
+kind(ice):-
+    query('Is this a sport on ice?').
+
 sport(hockey):-
     kind(winter_sport),
     kind(team_sport),
@@ -43,6 +49,11 @@ sport(acrobatics_on_skis):-
     kind(winter_sport),
     kind(olympic_sport),
     kind(extreme).
+
+sport(figure_skating):-
+    kind(winter_sport),
+    kind(olympic_sport),
+    kind(ice).
 
 sport(figure_skating):-
     kind(winter_sport),
@@ -66,10 +77,16 @@ sport(synchron_swimming):-
     kind(olympic_sport),
     kind(water_sport).
 
-sport(basketball):-
+sport(football):-
     kind(team_sport),
     kind(olympic_sport),
     kind(ball).
+
+sport(basketball):-
+    kind(team_sport),
+    kind(olympic_sport),
+    kind(ball),
+    kind(hands).
 
 sport(badminton):-
     kind(team_sport),
