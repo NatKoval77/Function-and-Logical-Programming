@@ -82,3 +82,54 @@ remove_items(DigitSum, [HeadIn|TailIn], [HeadIn|TailOut]) :- sum_dig_t(HeadIn, H
 rem_it_print(DigitSum, List) :- remove_items(DigitSum, List, Result), write_list(Result).
 
 % consult("comb_recursion.pl").
+
+% min_digit(+Number, -MinDigit) - минимальная цифра числа вверх 
+min_digit(0, 9) :- !. 
+min_digit(Number, MinDigit) :- NextNumber is Number div 10, min_digit(NextNumber, DigitNext), 
+    DigitLast is Number mod 10, 
+    ((DigitLast < DigitNext) -> MinDigit is DigitLast; 
+    MinDigit is DigitNext). 
+
+% min_digit_t(+X, -N) - минимальная цифра числа вниз 
+min_digit_t(Number, MinDigit) :- min_digit_tail(Number, 9, MinDigit). 
+min_digit_tail(0, MinDigit, MinDigit) :- !. 
+min_digit_tail(Number, Dig, MinDigit) :- DigitLast is Number mod 10, 
+    ((DigitLast < Dig) -> NextDig is DigitLast; NextDig is Dig), 
+    NumberNext is Number div 10, 
+    min_digit_tail(NumberNext, NextDig, MinDigit). 
+
+ 
+% count_less3(+Number, -Count) - количество цифр числа, меньших 3, вверх  
+count_less3(0,0):- !.
+count_less3(Number, Count):- NextNumber is Number div 10,
+  count_less3(NextNumber, NextCount),
+  DigitLast is Number mod 10,
+  ( (DigitLast < 3) -> Count is NextCount + 1; Count is NextCount).
+
+% count_less3_t(+Number, -Count) - количество цифр числа, меньших 3, вниз 
+count_less3_t(Number, Count) :- count_less3_tail(Number, 0, Count). 
+count_less3_tail(0, Count, Count) :- !. 
+count_less3_tail(Number, Btw, Count) :- 
+  DigitLast is Number mod 10, 
+  ( (DigitLast < 3) -> NewBtw is Btw + 1; NewBtw is Btw), 
+  NextNumber is Number div 10, 
+  count_less3_tail(NextNumber, NewBtw, Count). 
+ 
+ 
+% count_div(+Number, -Count) - количество делителей вверх 
+count_div(Number, Count) :- count_div_(Number, 1, Count). 
+count_div_(Number, Number, 1) :- !. 
+count_div_(Number, Div, Count) :- DivPlus is Div + 1,
+  count_div_(Number, DivPlus, CountNext), 
+  Rem is Number mod Div, 
+  ( (Rem =:= 0) -> Count is CountNext + 1; 
+  Count is CountNext). 
+ 
+% count_div_t(+Number, -Count) - количество делителей вниз 
+count_div_t(Number, Count) :- count_div_tail(Number, Count, 1, 1). 
+count_div_tail(Number, CurCount, Number, CurCount) :- !. 
+count_div_tail(Number, Count, CurDel, CurCount) :- 
+  Rem is Number mod CurDel, 
+  ((Rem =:= 0) -> NextCount is CurCount + 1; 
+  NextCount is CurCount), NextDel is CurDel + 1,
+  count_div_tail(Number, Count, NextDel, NextCount).
