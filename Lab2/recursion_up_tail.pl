@@ -33,13 +33,13 @@ divider_t(Number, Divisor, Divs, AllDiv):- Divisor > 1, Remains is Number mod Di
         divider_t(Number, PreDivisor, [Divisor|Divs], AllDiv);
         PreDivisor is Divisor - 1, divider_t(Number, PreDivisor, Divs, AllDiv) ).
 
-% square(-Sq) - проверка на квадрат
+% square(+Sq) - проверка на квадрат
 square(Sq) :-
     Sq >= 1,
     N is integer(sqrt(Sq)),
     N*N =:= Sq.
 
-% square_free(-Number) - проверка свободное ли от квадратов число
+% square_free(+Number) - проверка свободное ли от квадратов число
 square_free(Number) :-
     Number >= 1, 
     divider(Number, AllDiv),
@@ -62,7 +62,7 @@ sum_list_down([],CurSum,CurSum):-!.
 sum_list_down([H|T],CurSum,Sum) :- NewSum is CurSum + H, sum_list_down(T,NewSum,Sum).
 
 
-%read_sum_write(+C) - сумма списка на экран
+%read_sum_write(+N) - сумма списка на экран
 read_sum_write(N):- read_list(N, List),
 sum_list_down(List, Sum),
 write(Sum).
@@ -90,7 +90,7 @@ min_digit(Number, MinDigit) :- NextNumber is Number div 10, min_digit(NextNumber
     ((DigitLast < DigitNext) -> MinDigit is DigitLast; 
     MinDigit is DigitNext). 
 
-% min_digit_t(+X, -N) - минимальная цифра числа вниз 
+% min_digit_t(+Number, -MinDigit) - минимальная цифра числа вниз 
 min_digit_t(Number, MinDigit) :- min_digit_tail(Number, 9, MinDigit). 
 min_digit_tail(0, MinDigit, MinDigit) :- !. 
 min_digit_tail(Number, Dig, MinDigit) :- DigitLast is Number mod 10, 
@@ -133,3 +133,47 @@ count_div_tail(Number, Count, CurDel, CurCount) :-
   ((Rem =:= 0) -> NextCount is CurCount + 1; 
   NextCount is CurCount), NextDel is CurDel + 1,
   count_div_tail(Number, Count, NextDel, NextCount).
+
+
+% Дан целочисленный массив. Необходимо осуществить циклический 
+% сдвиг элементов массива влево <- на три позиции.
+
+
+
+% Дан целочисленный массив. Необходимо осуществить циклический 
+% сдвиг элементов массива вправо -> на одну позицию.
+
+
+
+% Дан целочисленный массив. Проверить, чередуются ли в нем 
+% положительные и отрицательные +- числа.
+
+
+
+% Три друга заняли 1, 2, 3 места в соревнованиях универсиады.
+% Друзья разной национальности, зовут по-разному, любят разные
+% виды спорта. Майкл предпочитает баскетбол и играет лучше, чем
+% американец. Израильтянин Саймон играет лучше теннисиста. 
+% Игрок в крикет занял первое место. Кто является австралийцем? 
+% Каким спортом увлекается Ричард?
+
+in_list([El|_],El).
+in_list([_|T],El):-in_list(T,El).
+
+pr_friends:- 
+
+    Competitive=[_, _, _, _],
+
+    in_list(Competitive,[michael, basketball, better, _]),
+    in_list(Competitive,[simon, _, _, israel]),
+    in_list(Competitive,[_, _, _, australian]),
+    in_list(Competitive,[richard, _, _, _]),
+    in_list(Competitive,[_, cricket, best, _]),
+    in_list(Competitive,[_, tennis, _, _]),
+    in_list(Competitive,[_, _, _, american]),
+    in_list(Competitive,[_, _, worst, _]),
+
+
+    write(Competitive), !, fail.
+
+% consult("recursion_up_tail.pl").
