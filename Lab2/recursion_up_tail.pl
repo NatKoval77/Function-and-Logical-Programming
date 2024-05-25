@@ -46,12 +46,12 @@ square_free(Number) :-
     ( member(S, AllDiv), square(S) -> fail; true ).
 
 
-%read_list(+N,-List) - чтение с клавиатуры
+%read_list(+N,-List) - чтение списка с клавиатуры
 read_list(0,[]):-!.
 read_list(N,[Head|Tail]) :- read(Head), NewN is N - 1,
     read_list(NewN,Tail).
 
-%write_list(+List) - вывод на экран
+%write_list(+List) - вывод списка на экран
 write_list([]) :- !.
 write_list([H|T]) :- write(H), nl, write_list(T).
 
@@ -64,8 +64,8 @@ sum_list_down([H|T],CurSum,Sum) :- NewSum is CurSum + H, sum_list_down(T,NewSum,
 
 %read_sum_write(+N) - сумма списка на экран
 read_sum_write(N):- read_list(N, List),
-sum_list_down(List, Sum),
-write(Sum).
+sum_list_down(List, Sum), write('Entered list: '), nl,
+write_list(List), write('Sum of the list items: '), write(Sum).
 
 
 %sum_list_up(+List,-Sum) - сумма списка вверх
@@ -81,7 +81,7 @@ remove_items(DigitSum, [HeadIn|TailIn], [HeadIn|TailOut]) :- sum_dig_t(HeadIn, H
 % rem_it_print(+DigitSum, +List) - выводит результат на экран
 rem_it_print(DigitSum, List) :- remove_items(DigitSum, List, Result), write_list(Result).
 
-% consult("comb_recursion.pl").
+% TASK 2
 
 % min_digit(+Number, -MinDigit) - минимальная цифра числа вверх 
 min_digit(0, 9) :- !. 
@@ -135,27 +135,34 @@ count_div_tail(Number, Count, CurDel, CurCount) :-
   count_div_tail(Number, Count, NextDel, NextCount).
 
 
-% Дан целочисленный массив. Необходимо осуществить циклический 
-% сдвиг элементов массива влево <- на три позиции.
+% TASK 3
+
+% Дан массив. Осуществить сдвиг элементов <- на 3 позиции.
+
+% left3(+List, -NList) - выполняет циклический сдвиг на 3 элемента влево
+left3([], _):- !, fail.
+left3([H1,H2,H3|T], ResList) :- length([H1,H2,H3|T], Count), (Count > 3 -> append(T, [H1,H2,H3], ResList); write_list([H1,H2,H3|T]), fail).
 
 
+% Дан массив. Осуществить сдвиг элементов -> на 1 позицию.
 
-% Дан целочисленный массив. Необходимо осуществить циклический 
-% сдвиг элементов массива вправо -> на одну позицию.
-
-
-
-% Дан целочисленный массив. Проверить, чередуются ли в нем 
-% положительные и отрицательные +- числа.
+% right(+InputList, -ResList) - предикат, отвечающий за основную логику работы. Выполняет циклический сдвиг на 1 элемент вправо
+right(InputList, ResList) :- append(T, [H], InputList), append([H], T, ResList), !.
 
 
+% Дан массив. Проверить, чередуются ли в нем +- числа.
+
+% check(+List) - предикат, отвечающий за основную логику работы. Выполняет проверку чередования положительных и отрицательных элементов в массиве
+check([H1,H2|T]) :- ( ((H1 < 0, H2 > 0); (H1 > 0, H2 < 0)) -> (T == [] -> !; append([H2], T, CurList), check(CurList)); fail).
+
+
+% TASK 4
 
 % Три друга заняли 1, 2, 3 места в соревнованиях универсиады.
-% Друзья разной национальности, зовут по-разному, любят разные
-% виды спорта. Майкл предпочитает баскетбол и играет лучше, чем
-% американец. Израильтянин Саймон играет лучше теннисиста. 
-% Игрок в крикет занял первое место. Кто является австралийцем? 
-% Каким спортом увлекается Ричард?
+% Друзья разной национальности, зовут по-разному, любят разные виды спорта.
+% Майкл предпочитает баскетбол и играет лучше, чем американец.
+% Израильтянин Саймон играет лучше теннисиста. Игрок в крикет занял первое место.
+% Кто является австралийцем? Каким спортом увлекается Ричард?
 
 in_list([El|_],El).
 in_list([_|T],El):-in_list(T,El).
