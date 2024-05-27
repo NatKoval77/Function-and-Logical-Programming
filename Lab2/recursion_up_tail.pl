@@ -188,13 +188,43 @@ pr_friends:-
 % TASK 5
 
 % Найти сумму непростых делителей числа.
+% is_prime(+Number) - проверка на простое число
+is_prime(2):- true, !.
+is_prime(Number):- Range is Number - 1, 
+  ((between(2, Range, Div), 0 is Number mod Div) -> fail;
+    true, !).
 
+% sum_nonprime_divs(+Number, -Sum) - сумма непростых делителей
+sum_nonprime_divs(Number, Sum):- divider(Number, Divs),
+    findall(Div, (member(Div, Divs), \+ is_prime(Div)), NPDivs),
+    sum_list_up(NPDivs, Sum).
 
 
 % Найти кол-во чисел, не являющихся делителями исходного числа,
 % не взамнопростых с ним и взаимно простых с суммой простых цифр этого числа.
+% pr_sumdig_t(+Num, -Sum) - сумма простых цифр числа
+pr_sumdig_t(Num, Sum):- pr_sumdig_t(Num, 0, Sum).
+pr_sumdig_t(0, Sum, Sum):- !.
+pr_sumdig_t(Num, CS, Sum):- Dig is Num // 10, Rem is Num mod 10,
+  (is_prime(Rem) -> CurS is CS + Rem, pr_sumdig_t(Dig, CurS, Sum);
+    pr_sumdig_t(Dig, CS, Sum)).
 
+% non_div(+Numb, +Div) - проверка на делитель ли 
+non_div(Numb, Div):- Div =\= 0, Numb mod Div =\= 0.
 
+% gcd(+N1, +N2, -Gr) - наибольший общий делитель
+gcd(N1, 0, N1):- !.
+gcd(N1, N2, Gr):- N2 > 0, Rem is N1 mod N2, gcd(N2, Rem, Gr).
+
+% non_copr(+Numb, +Div) - проверка на взаимную простоту
+non_copr(Numb, Div):- gcd(Numb, Div, Greatest), Greatest > 1.
+
+% count_numbers(+Numb, -Count) - подсчет чисел по условиям
+count_numbers(Numb, Count) :- findall(Number, ( between(2, Numb, Number), Number =\= Numb, 
+      non_div(Numb, Number), non_copr(Numb, Number), pr_sumdig_t(Numb, Sum), gcd(Number, Sum, 1)), 
+    Numbers), length(Numbers, Count).
+
+% consult("recursion_up_tail.pl").
 
 
 % TASK 6
