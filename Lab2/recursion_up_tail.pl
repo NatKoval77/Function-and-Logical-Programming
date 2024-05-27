@@ -184,3 +184,34 @@ pr_friends:-
     write(Competitive), !, fail.
 
 % consult("recursion_up_tail.pl").
+
+% TASK 5
+
+% Найти сумму непростых делителей числа.
+
+
+
+% Найти кол-во чисел, не являющихся делителями исходного числа,
+% не взамнопростых с ним и взаимно простых с суммой простых цифр этого числа.
+
+
+
+
+% TASK 6
+
+% 145 = 1! + 4! + 5!
+% fact_sum(+Numb, -Sum) - предикат считающий сумму факториалов цифр числа
+fact_sum(Numb, Sum):- fact_sum(Numb, 0, Sum).
+fact_sum(Sum, Sum, Sum):- !.
+fact_sum(Numb, Acc, Sum):- 
+  NumbNext is Numb // 10, DigLast is Numb mod 10, 
+  fact_t(DigLast, FLast), AccNext = Acc + FLast,
+  ((NumbNext >= 10) -> fact_sum(NumbNext, AccNext, Sum);
+    fact_t(NumbNext, FNext), Sum is AccNext + FNext).
+
+search:- search(1000000, 0).
+% search(+Num, -Sum) - основной предикат реализующий поиск "любопытных" чисел и вывод суммы 
+search(2, Sum):- write("the sum is: "), write(Sum), !.
+search(Num, Sum):- fact_sum(Num, FSum), Next is Num-1, 
+  ((Num =:= FSum) -> write(FSum), nl, SumAll is Sum + FSum, search(Next, SumAll);
+    search(Next, Sum)).
